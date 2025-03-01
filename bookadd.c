@@ -143,6 +143,41 @@ void editBook() {
     printf("\n✅ 수정 완료!\n");
 }
 
+void deleteBook() {
+    if (book_count == 0) {
+        printf("\n📖 저장된 책이 없습니다. 삭제할 수 없습니다.\n");
+        return;
+    }
+
+    int bookIndex;
+    listBooks(); // 현재 책 목록 출력
+    printf("\n삭제할 책 번호를 입력하세요 (1~%d, 취소하려면 0 입력): ", book_count);
+    scanf("%d", &bookIndex);
+    getchar(); // 입력 버퍼 정리
+
+    if (bookIndex == 0) {
+        printf("\n🛑 삭제 취소.\n");
+        return;
+    }
+
+    bookIndex--; // 배열 인덱스 맞추기
+
+    if (bookIndex < 0 || bookIndex >= book_count) {
+        printf("\n❌ 잘못된 번호입니다! 다시 시도하세요.\n");
+        return;
+    }
+
+    printf("\n📕 책 '%s' 삭제 완료!\n", books[bookIndex].title);
+
+    // 삭제된 책 이후의 데이터를 앞으로 이동
+    for (int i = bookIndex; i < book_count - 1; i++) {
+        books[i] = books[i + 1];
+    }
+
+    book_count--; // 책 개수 감소
+
+    printf("\n✅ 책 목록이 업데이트되었습니다!\n");
+}
 
 // 책 목록 출력 함수
 void listBooks() {
@@ -166,7 +201,6 @@ void freeMemory() {
 }
 
 int main() {
-    // 동적 메모리 할당
     books = malloc(book_capacity * sizeof(Book));
     if (books == NULL) {
         printf("메모리 할당 실패!\n");
@@ -179,7 +213,8 @@ int main() {
         printf("1. 책 추가\n");
         printf("2. 책 목록 보기\n");
         printf("3. 책 수정\n");
-        printf("4. 종료\n");
+        printf("4. 책 삭제\n");
+        printf("5. 종료\n");
         printf("선택: ");
         scanf("%d", &choice);
         
@@ -187,8 +222,12 @@ int main() {
             case 1: addBook(); break;
             case 2: listBooks(); break;
             case 3: editBook(); break;
-            case 4: freeMemory(); return 0;
-            default: printf("잘못된 입력입니다.\n");
+            case 4: deleteBook(); break;
+            case 5:
+                freeMemory();
+                return 0;
+            default:
+                printf("잘못된 입력입니다.\n");
         }
     }
 }
