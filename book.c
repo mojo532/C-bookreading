@@ -55,6 +55,8 @@ void listBooks() {
 }
 
 //책 수정
+#include "book.h"
+
 void editBook() {
     if (book_count == 0) {
         printf("\n📖 저장된 책이 없습니다. 먼저 책을 추가하세요.\n");
@@ -81,61 +83,61 @@ void editBook() {
         printf("\n❌ 잘못된 번호입니다! 다시 입력하세요.\n");
     }
 
-    // 수정할 항목 선택
-    int fieldChoice;
+    // 사용자가 0을 입력할 때까지 계속 수정 가능
     while (1) {
+        int fieldChoice;
         printf("\n수정할 항목을 선택하세요:\n");
         printf("1. 제목\n");
         printf("2. 저자\n");
         printf("3. 읽은 날짜\n");
         printf("4. 평점\n");
         printf("5. 메모\n");
-        printf("선택 (취소하려면 0 입력): ");
+        printf("0. 수정 완료\n");
+        printf("선택: ");
         scanf("%d", &fieldChoice);
         getchar(); // 입력 버퍼 정리
 
         if (fieldChoice == 0) {
-            printf("\n🛑 수정 취소.\n");
-            return;
+            printf("\n✅ 모든 수정이 완료되었습니다!\n");
+            break;
         }
 
-        if (fieldChoice >= 1 && fieldChoice <= 5) break;
-        printf("\n❌ 잘못된 선택입니다. 다시 입력하세요.\n");
+        switch (fieldChoice) {
+            case 1:
+                printf("새로운 제목: ");
+                fgets(books[bookIndex].title, 100, stdin);
+                books[bookIndex].title[strcspn(books[bookIndex].title, "\n")] = '\0';
+                break;
+            case 2:
+                printf("새로운 저자: ");
+                fgets(books[bookIndex].author, 100, stdin);
+                books[bookIndex].author[strcspn(books[bookIndex].author, "\n")] = '\0';
+                break;
+            case 3:
+                printf("새로운 읽은 날짜 (YYYY-MM-DD): ");
+                scanf("%s", books[bookIndex].date);
+                getchar(); // 입력 버퍼 정리
+                break;
+            case 4:
+                while (1) {
+                    printf("새로운 평점 (1.0 ~ 5.0): ");
+                    scanf("%f", &books[bookIndex].rating);
+                    getchar();
+                    if (books[bookIndex].rating >= 1.0 && books[bookIndex].rating <= 5.0) break;
+                    printf("\n❌ 평점은 1.0에서 5.0 사이여야 합니다. 다시 입력하세요.\n");
+                }
+                break;
+            case 5:
+                printf("새로운 메모: ");
+                fgets(books[bookIndex].memo, 200, stdin);
+                books[bookIndex].memo[strcspn(books[bookIndex].memo, "\n")] = '\0';
+                break;
+            default:
+                printf("\n❌ 잘못된 선택입니다. 다시 입력하세요.\n");
+        }
     }
-
-    // 선택한 항목 수정
-    switch (fieldChoice) {
-        case 1:
-            printf("새로운 제목: ");
-            fgets(books[bookIndex].title, 100, stdin);
-            books[bookIndex].title[strcspn(books[bookIndex].title, "\n")] = '\0';
-            break;
-        case 2:
-            printf("새로운 저자: ");
-            fgets(books[bookIndex].author, 100, stdin);
-            books[bookIndex].author[strcspn(books[bookIndex].author, "\n")] = '\0';
-            break;
-        case 3:
-            printf("새로운 읽은 날짜 (YYYY-MM-DD): ");
-            scanf("%s", books[bookIndex].date);
-            break;
-        case 4:
-            while (1) {
-                printf("새로운 평점 (1.0 ~ 5.0): ");
-                scanf("%f", &books[bookIndex].rating);
-                if (books[bookIndex].rating >= 1.0 && books[bookIndex].rating <= 5.0) break;
-                printf("\n❌ 평점은 1.0에서 5.0 사이여야 합니다. 다시 입력하세요.\n");
-            }
-            break;
-        case 5:
-            printf("새로운 메모: ");
-            fgets(books[bookIndex].memo, 200, stdin);
-            books[bookIndex].memo[strcspn(books[bookIndex].memo, "\n")] = '\0';
-            break;
-    }
-
-    printf("\n✅ 수정 완료!\n");
 }
+
 
 
 // 책 삭제 기능
