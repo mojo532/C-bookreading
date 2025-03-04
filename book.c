@@ -6,13 +6,24 @@ int book_capacity = 10; // 초기 크기 설정
 
 // 책 추가 기능
 void addBook() {
-    if (book_count >= book_capacity) {
-        book_capacity *= 2;
-        books = realloc(books, book_capacity * sizeof(Book));
+    // 처음 실행될 때 초기 할당
+    if (books == NULL) {
+        books = (Book*)malloc(book_capacity * sizeof(Book));
         if (books == NULL) {
             printf("메모리 할당 실패!\n");
             exit(1);
         }
+    }
+
+    // 책 개수가 저장 공간을 초과하면 크기 2배 증가 (가변 크기)
+    if (book_count >= book_capacity) {
+        book_capacity *= 2;
+        Book *temp = (Book*)realloc(books, book_capacity * sizeof(Book));
+        if (temp == NULL) {
+            printf("메모리 재할당 실패!\n");
+            exit(1);
+        }
+        books = temp;
     }
 
     printf("\n책 제목: ");
@@ -153,6 +164,11 @@ void deleteBook() {
     scanf("%d", &bookIndex);
     getchar();
 
+    if (bookIndex == 0) {
+        printf("\n🛑 삭제 취소.\n");
+        return;
+    }
+
     bookIndex--;
     if (bookIndex < 0 || bookIndex >= book_count) {
         printf("\n❌ 잘못된 번호입니다!\n");
@@ -160,15 +176,29 @@ void deleteBook() {
     }
 
     printf("\n📕 책 '%s' 삭제 완료!\n", books[bookIndex].title);
+    //책 목록을 앞으로 이동
     for (int i = bookIndex; i < book_count - 1; i++) {
         books[i] = books[i + 1];
     }
 
     book_count--;
+
+    // 메모리 크기 줄이기 (최소 크기 보장)
+    if (book_count > 0 && book_count < book_capacity / 2) {
+        book_capacity /= 2;
+        Book *temp = (Book*)realloc(books, book_capacity * sizeof(Book));
+        if (temp != NULL) { 
+            books = temp;
+        }
+    }
+
     printf("\n✅ 책 목록이 업데이트되었습니다!\n");
 }
 
 // 메모리 해제
 void freeMemory() {
-    free(books);
+    if (books != NULL) {
+        free(books);
+        books = NULL;
+    }
 }
