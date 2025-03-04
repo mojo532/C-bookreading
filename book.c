@@ -195,6 +195,45 @@ void deleteBook() {
     printf("\n✅ 책 목록이 업데이트되었습니다!\n");
 }
 
+Book* searchBook() {
+    if (book_count == 0) {
+        printf("\n📖 저장된 책이 없습니다. 먼저 책을 추가하세요.\n");
+        return NULL;
+    }
+
+    char keyword[100];
+    printf("\n🔍 검색할 책 제목 또는 저자를 입력하세요: ");
+    getchar();
+    fgets(keyword, 100, stdin);
+    keyword[strcspn(keyword, "\n")] = '\0';
+
+    int found = 0;
+    Book *firstMatch = NULL;  // 첫 번째 검색된 책의 포인터 저장
+
+    printf("\n🔎 검색 결과:\n");
+    for (int i = 0; i < book_count; i++) {
+        if (strstr(books[i].title, keyword) || strstr(books[i].author, keyword)) {
+            printf("\n📖 [%d] %s - %s (%s)\n", i + 1, books[i].title, books[i].author, books[i].date);
+            printf("   ⭐ 평점: %.1f/5.0\n", books[i].rating);
+            printf("   📝 메모: %s\n", books[i].memo);
+            printf("---------------------------------------------\n");
+
+            if (firstMatch == NULL) {  // 첫 번째 검색된 책 저장
+                firstMatch = &books[i];
+            }
+            found = 1;
+        }
+    }
+
+    if (!found) {
+        printf("\n❌ 검색 결과가 없습니다.\n");
+        return NULL;
+    }
+
+    return firstMatch;  // 첫 번째 검색된 책 반환
+}
+
+
 // 도서 목록 초기화 함수
 void initLibrary() {
     books = (Book*)malloc(book_capacity * sizeof(Book));

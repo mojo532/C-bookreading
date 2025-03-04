@@ -24,6 +24,7 @@ void addBook();
 void listBooks();
 void editBook();
 void deleteBook();
+Book* searchBook();
 void initLibrary();
 void freeMemory();
 
