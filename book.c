@@ -195,10 +195,19 @@ void deleteBook() {
     printf("\n✅ 책 목록이 업데이트되었습니다!\n");
 }
 
+// 도서 목록 초기화 함수
+void initLibrary() {
+    books = (Book*)malloc(book_capacity * sizeof(Book));
+    if (books == NULL) {
+        printf("메모리 할당 실패!\n");
+        exit(1);
+    }
+}
+
 // 메모리 해제
 void freeMemory() {
     if (books != NULL) {
         free(books);
-        books = NULL;
+        books = NULL; // 🔹 메모리 해제 후 NULL 처리
     }
 }

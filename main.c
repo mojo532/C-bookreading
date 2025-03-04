@@ -1,11 +1,9 @@
 #include "book.h"
 
+
 int main() {
-    books = malloc(book_capacity * sizeof(Book));
-    if (books == NULL) {
-        printf("메모리 할당 실패!\n");
-        return 1;
-    }
+    // 동적 메모리 할당 초기화
+    initLibrary();
 
     int choice;
     while (1) {
@@ -24,10 +22,11 @@ int main() {
             case 3: deleteBook(); break;
             case 4: listBooks(); break;  // ✅ 4번으로 이동
             case 5:
-                freeMemory();
-                return 0;
+                printf("\n🚀 프로그램을 종료합니다. 안녕히 가세요!\n");
+                freeMemory();  // ✅ 메모리 해제
+                exit(0);
             default:
-                printf("잘못된 입력입니다.\n");
+                printf("\n❌ 잘못된 입력입니다. 다시 선택하세요.\n");
         }
     }
 }
