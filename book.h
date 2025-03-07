@@ -25,6 +25,8 @@ void listBooks();
 void editBook();
 void deleteBook();
 Book* searchBook();
+void saveToFile();  // 책 목록을 파일에 저장
+void loadFromFile();
 void initLibrary();
 void freeMemory();
 

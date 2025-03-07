@@ -4,6 +4,7 @@ Book *books = NULL;    // 동적으로 할당할 배열
 int book_count = 0;    // 현재 저장된 책 개수
 int book_capacity = 10; // 초기 크기 설정
 
+
 // 책 추가 기능
 void addBook() {
     // 처음 실행될 때 초기 할당
@@ -233,6 +234,68 @@ Book* searchBook() {
     return firstMatch;  // 첫 번째 검색된 책 반환
 }
 
+void saveToFile() {
+    FILE *file = fopen("books.txt", "w");
+    if (file == NULL) {
+        printf("\n❌ 파일 저장에 실패했습니다!\n");
+        return;
+    }
+
+    for (int i = 0; i < book_count; i++) {
+        fprintf(file, "%s|%s|%s|%.1f|%s\n",
+                books[i].title,
+                books[i].author,
+                books[i].date,
+                books[i].rating,
+                books[i].memo);
+    }
+
+    fclose(file);
+    printf("\n💾 책 목록이 'books.txt'에 저장되었습니다!\n");
+}
+
+void loadFromFile() {
+    FILE *file = fopen("books.txt", "r");
+    if (file == NULL) {
+        printf("\n📂 저장된 책 목록이 없습니다. 새로 시작합니다.\n");
+        return;
+    }
+
+    char line[400];
+    while (fgets(line, sizeof(line), file)) {
+        if (book_count >= book_capacity) {
+            book_capacity *= 2;
+            books = (Book*)realloc(books, book_capacity * sizeof(Book));
+            if (books == NULL) {
+                printf("❌ 메모리 할당 실패!\n");
+                exit(1);
+            }
+        }
+
+        Book *newBook = &books[book_count];
+
+        char *token = strtok(line, "|");
+        strcpy(newBook->title, token);
+
+        token = strtok(NULL, "|");
+        strcpy(newBook->author, token);
+
+        token = strtok(NULL, "|");
+        strcpy(newBook->date, token);
+
+        token = strtok(NULL, "|");
+        newBook->rating = atof(token);
+
+        token = strtok(NULL, "|");
+        strcpy(newBook->memo, token);
+        newBook->memo[strcspn(newBook->memo, "\n")] = '\0';  // 개행 문자 제거
+
+        book_count++;
+    }
+
+    fclose(file);
+    printf("\n📖 저장된 책 목록을 불러왔습니다! (%d권)\n", book_count);
+}
 
 // 도서 목록 초기화 함수
 void initLibrary() {
