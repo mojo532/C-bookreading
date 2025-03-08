@@ -104,7 +104,7 @@ void editBook() {
         printf("3. 읽은 날짜\n");
         printf("4. 평점\n");
         printf("5. 메모\n");
-        printf("0. 수정 완료\n");
+        printf("0. 수정 완료\n\n");
         printf("선택: ");
         scanf("%d", &fieldChoice);
         getchar(); // 입력 버퍼 정리
