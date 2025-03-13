@@ -25,6 +25,7 @@ void listBooks();
 void editBook();
 void deleteBook();
 Book* searchBook();
+void recommendBooks();  // 평점 기반 추천 함수
 void saveToFile();  // 책 목록을 파일에 저장
 void loadFromFile();
 void initLibrary();

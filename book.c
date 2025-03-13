@@ -254,6 +254,26 @@ void saveToFile() {
     printf("\n💾 책 목록이 'books.txt'에 저장되었습니다!\n");
 }
 
+void recommendBooks() {
+    int found = 0;
+    printf("\n📚 추천 책 목록 (평점 4.5 이상)\n");
+    printf("-------------------------------------\n");
+
+    for (int i = 0; i < book_count; i++) {
+        if (books[i].rating >= 4.5) {
+            printf("[%d] %s - %s (%s)\n", i + 1, books[i].title, books[i].author, books[i].date);
+            printf("     ⭐ 평점: %.1f/5.0\n", books[i].rating);
+            printf("     📝 메모: %s\n", books[i].memo);
+            printf("-------------------------------------\n");
+            found = 1;
+        }
+    }
+
+    if (!found) {
+        printf("❌ 추천할 책이 없습니다. 더 높은 평점의 책을 추가해보세요!\n");
+    }
+}
+
 void loadFromFile() {
     FILE *file = fopen("books.txt", "r");
     if (file == NULL) {

@@ -14,7 +14,8 @@ int main() {
         printf("3️⃣  책 삭제\n");
         printf("4️⃣  책 목록 보기\n");
         printf("5️⃣  책 검색 🔍\n");
-        printf("6️⃣  종료\n\n");
+        printf("6️⃣  책 추천 💡 (평점 기반)\n");
+        printf("7️⃣  종료\n\n");
         printf("선택: ");
         scanf("%d", &choice);
 
@@ -30,7 +31,8 @@ int main() {
                 }
                 break;
             }
-            case 6:
+            case 6: recommendBooks(); break;
+            case 7:
                 saveToFile();  // ✅ 프로그램 종료 시 자동 저장
                 printf("\n🚀 프로그램을 종료합니다. 안녕히 가세요!\n");
                 freeMemory();
